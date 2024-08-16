@@ -11,7 +11,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     {
       schema: {
         body: Type.Object({
-          project_id: Type.String({ minLength: 6, maxLength: 10 }),
+          project_id: Type.String({ minLength: 6, maxLength: 6 }),
           event_name: Type.String({ minLength: 1 }),
           country_code: Type.String({ maxLength: 2 }),
           timestamp: Type.Number({ minimum: 1 }),

@@ -12,7 +12,6 @@ const fastify = Fastify({ forceCloseConnections: true, logger: true });
 
 fastify.register(fastifySwagger);
 fastify.register(fastifySwaggerUi);
-
 fastify.register(AutoLoad, {
   dir: path.join(__dirname, 'routes'),
 });

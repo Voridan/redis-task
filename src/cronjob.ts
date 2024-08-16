@@ -1,8 +1,9 @@
+import path from 'path';
 import dotenv from 'dotenv';
 import { Client } from 'pg';
 import { createClient } from 'redis';
 import { deserializeEvent } from './util/event.deserialize';
-import path from 'path';
+import { RedisEvent } from './interface';
 
 dotenv.config({
   path: path.join(__dirname, '..', '.env'),
@@ -23,13 +24,8 @@ const redisClient = createClient({
 pgClient.on('error', (err) => console.log('Postgres Client Error', err));
 redisClient.on('error', (err) => console.log('Redis Client Error', err));
 
-type Event = {
-  value: string;
-  score: number;
-};
-
 async function main() {
-  const BATCH_SIZE = 10_000;
+  const BATCH_SIZE = 100;
   const SET_KEY = 'events';
   const TEMP_SET_KEY = 'old_events';
   const getEvents = () =>
@@ -58,7 +54,7 @@ async function main() {
 
 main();
 
-async function upsertEvents(events: Event[]) {
+async function upsertEvents(events: RedisEvent[]) {
   const placeholders = events.map((_, idx) => getPlaceholderStr(6, idx));
   const values = events.reduce(
     (joined, { value, score }) =>
